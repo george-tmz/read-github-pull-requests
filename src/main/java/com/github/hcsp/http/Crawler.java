@@ -53,7 +53,7 @@ public class Crawler {
                 String title = element.child(0).child(1).child(0).text();
                 String classTitle = element.child(0).child(1).child(2).attr("class");
                 String author;
-                if (classTitle.equals("labels lh-default d-block d-md-inline")) {
+                if ("labels lh-default d-block d-md-inline".equals(classTitle)) {
                     author = element.child(0).child(1).child(3).child(0).child(1).text();
                 } else {
                     author = element.child(0).child(1).child(2).child(0).child(1).text();
