@@ -1,5 +1,6 @@
 package com.github.hcsp.http;
 
+import okhttp3.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Crawler {
+
+    public static final MediaType JSON
+            = MediaType.get("application/json; charset=utf-8");
+
     static class GitHubPullRequest {
         // Pull request的编号
         int number;
@@ -65,6 +70,30 @@ public class Crawler {
         } finally {
             response1.close();
         }
+        return list;
+    }
+
+    /**
+     * 使用OKHTTP3
+     *
+     * @param repo
+     * @return
+     */
+    public static List<GitHubPullRequest> getFirstPageOfPullRequestsByOkhttp(String repo) {
+        String url = "https://github.com/" + repo + "/pulls";
+        OkHttpClient client = new OkHttpClient();
+        String json = "";
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            String str = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<GitHubPullRequest> list = new ArrayList<>();
         return list;
     }
 
